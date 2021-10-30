@@ -1,0 +1,24 @@
+with open("./data", "r") as f:
+    _input = list(map(int, f.read().split("\n")))
+
+def solve(_input):
+    for x in _input:
+        if 2020-x in _input:
+            return x*(2020-x)
+
+print(solve(_input))
+
+def solve_multi(_input, target, num):
+    if num == 2:
+        for x in _input:
+            if target-x in _input:
+                return x*(target-x)
+        return None
+    else:
+        for i in range(len(_input)):
+            res = solve_multi(_input[i+1:], target-_input[i], num-1)
+            if res is not None:
+                return _input[i] * res
+
+print(solve_multi(_input, 2020, 3))
+

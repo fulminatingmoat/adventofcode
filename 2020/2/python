@@ -1,0 +1,34 @@
+import re
+from collections import Counter
+
+_list = []
+pattern = re.compile(r'(\d+)-(\d+) (.): (.+)')
+with open("./data", "r") as f:
+    _input = f.read()
+    for x in _input.split("\n"):
+        _list.append(pattern.match(x).groups())
+
+def solve(_list):
+    _count = 0
+    for x in _list:
+        c = Counter(x[3])
+        if c[x[2]] >= int(x[0]) and c[x[2]] <= int(x[1]):
+            _count += 1
+
+    return _count
+
+print(solve(_list))
+
+def solvev2(_list):
+    _count = 0
+    for x in _list:
+        if x[3][int(x[0])-1] == x[2]:
+            if x[3][int(x[1])-1] != x[2]:
+                _count += 1
+        elif x[3][int(x[1])-1] == x[2]:
+            if x[3][int(x[0])-1] != x[2]:
+                _count += 1
+
+    return _count
+
+print(solvev2(_list))
