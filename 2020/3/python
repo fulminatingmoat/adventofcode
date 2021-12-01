@@ -1,4 +1,4 @@
-with open("./data", "r") as f:
+with open("./2020/3/data", "r") as f:
     _input = f.read()
     lines = _input.split("\n")
 

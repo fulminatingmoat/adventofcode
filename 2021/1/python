@@ -1,0 +1,25 @@
+with open("./2021/1/data", "r") as f:
+    _input = list(map(int, f.read().split("\n")))
+
+def solve(_input):
+    res = 0
+    prev = _input[0]
+    for x in _input[1:]:
+        if x > prev: 
+            res+=1
+        prev = x
+    return res
+
+print(solve(_input))
+
+def solve_multi(_input):
+    res = 0
+    prev = sum(_input[0:3])
+    for i in range(len(_input[1:])-2):
+        if sum(_input[i+1: i+4]) > prev: 
+            res+=1
+        prev = sum(_input[i+1: i+4])
+    return res
+
+print(solve_multi(_input))
+

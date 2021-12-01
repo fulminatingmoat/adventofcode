@@ -3,7 +3,7 @@ from collections import Counter
 
 _list = []
 pattern = re.compile(r'(\d+)-(\d+) (.): (.+)')
-with open("./data", "r") as f:
+with open("./2020/2/data", "r") as f:
     _input = f.read()
     for x in _input.split("\n"):
         _list.append(pattern.match(x).groups())

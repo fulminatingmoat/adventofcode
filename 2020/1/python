@@ -1,4 +1,4 @@
-with open("./data", "r") as f:
+with open("./2020/1/data", "r") as f:
     _input = list(map(int, f.read().split("\n")))
 
 def solve(_input):
