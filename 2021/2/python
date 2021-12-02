@@ -1,0 +1,37 @@
+with open("./2021/2/data", "r") as f:
+    _input = list(map(lambda x: x.split(),f.read().split("\n")))
+
+def solve(_input):
+    x = 0
+    y = 0
+    for i in _input:
+        if i[0] == "forward":
+            x+=int(i[1])
+        if i[0] == "down":
+            y+=int(i[1])
+        if i[0] == "up":
+            y-=int(i[1])
+    print(x,y)
+    res = x*y
+    return res
+
+print(solve(_input))
+
+def solve_multi(_input):
+    x = 0
+    y = 0
+    aim = 0
+    for i in _input:
+        if i[0] == "forward":
+            x+=int(i[1])
+            y += aim*int(i[1])
+        if i[0] == "down":
+            aim+=int(i[1])
+        if i[0] == "up":
+            aim-=int(i[1])
+    print(x,y)
+    res = x*y
+    return res
+
+print(solve_multi(_input))
+
