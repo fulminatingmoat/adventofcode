@@ -1,0 +1,23 @@
+with open("./2021/3/data", "r") as f:
+    _input = list(map(lambda x: list(x),f.read().split("\n")))
+
+def solve(_input):
+    gamma = []
+    epsilon = []
+    print(zip(*_input).__next__())
+    for values in zip(*_input):
+        if values.count('1') > values.count('0'):
+            gamma.append('1')
+            epsilon.append('0')
+        else:
+            gamma.append('0')
+            epsilon.append('1')
+        print('loop')
+    return int(''.join(gamma), base=2) * int(''.join(epsilon), base=2)
+
+print(solve(_input))
+
+def solve_multi(_input):
+    pass
+#print(solve_multi(_input))
+
