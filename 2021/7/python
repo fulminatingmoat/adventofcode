@@ -1,0 +1,14 @@
+import statistics
+with open("./2021/7/data", "r") as f:
+    crabs = [int(crab) for crab in f.read().split(',')]
+
+def solve(crabs):
+    target = statistics.median(crabs)
+    print(round(sum(abs(crab-target) for crab in crabs)))
+    return min([sum(abs(crab-target) for crab in crabs) for target in range(min(crabs), max(crabs)+1)])
+
+def solve_2(crabs):
+    return min([sum(abs(crab-target)*(abs(crab-target)+1)//2 for crab in crabs) for target in range(min(crabs), max(crabs)+1)])
+
+print(solve(crabs))
+print(solve_2(crabs))

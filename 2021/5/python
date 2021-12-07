@@ -1,0 +1,202 @@
+import pprint
+import itertools
+
+
+class Point:
+
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+    def __repr__(self):
+
+        return f'Point({self.x}, {self.y})'
+
+
+    def __eq__(self, other):
+
+        return self.x == other.x and self.y == other.y
+
+    def __hash__(self):
+
+        return hash((self.x, self.y))
+
+
+class Line:
+
+    def __init__(self, p1, p2):
+        self.p1 = p1
+
+        self.p2 = p2
+
+        self.dx = p2.x - p1.x
+
+        self.dy = p2.y - p1.y
+
+        self.horizontal = self.dy == 0
+
+        self.vertical = self.dx == 0
+
+        self.slope = None
+
+
+        if not self.horizontal and not self.vertical:
+
+            self.slope = self.dy / self.dx
+
+    def __repr__(self):
+
+        return f'Line({self.p1}, {self.p2})'
+
+
+    def __eq__(self, other):
+
+        return self.p1 == other.p1 and self.p2 == other.p2
+
+    def __hash__(self):
+
+        return hash((self.p1, self.p2))
+
+
+    def intersect(self, other):
+
+        if self.horizontal and other.vertical:
+
+            return self.p1.x == other.p1.x
+
+
+        if self.vertical and other.horizontal:
+
+            return self.p1.y == other.p1.y
+
+
+        if self.horizontal and other.horizontal:
+
+            return False
+
+
+        if self.vertical and other.vertical:
+
+            return False
+
+
+        if self.horizontal:
+
+            return other.p1.y == self.p1.y
+
+
+        if self.vertical:
+
+            return other.p1.x == self.p1.x
+
+
+        if other.horizontal:
+
+            return self.p1.y == other.p1.y
+
+
+        if other.vertical:
+
+            return self.p1.x == other.p1.x
+
+
+        return self.slope == other.slope
+
+    def min_x(self):
+
+        return min(self.p1.x, self.p2.x)
+    def min_y(self):
+
+        return min(self.p1.y, self.p2.y)
+    def max_x(self):
+
+        return max(self.p1.x, self.p2.x)
+    def max_y(self):
+
+        return max(self.p1.y, self.p2.y)
+
+
+with open("./2021/5/data", "r") as f:
+
+    lines = [Line(*list(map(lambda x: Point(*list(map(int, x.strip().split(',')))), line.split('->')))) for line in f.readlines()]
+
+
+def solve(lines):
+
+    lines = list(filter(lambda x: x.horizontal or x.vertical, lines))
+
+    max_x = max([line.max_x() for line in lines])
+
+    max_y = max([line.max_y() for line in lines])
+
+    grid = [[0 for _ in range(max_x + 1)] for _ in range(max_y + 1)]
+    for x in lines:
+
+        if x.vertical:
+
+            for y in range(x.min_y(), x.max_y() + 1):
+
+                grid[y][x.min_x()] += 1
+
+                #print('added horizontal', x.min_x(), y)
+
+        elif x.horizontal:
+
+            for y in range(x.min_x(), x.max_x() + 1):
+
+                grid[x.min_y()][y] += 1
+
+                #print('added vertical', y, x.min_y())
+
+    return len(list(filter(lambda x: x > 1, list(itertools.chain(*grid)))))
+
+
+#print(solve(lines))
+
+
+def solve_2(lines):
+
+    max_x = max([line.max_x() for line in lines])
+
+    max_y = max([line.max_y() for line in lines])
+
+    grid = [[0 for _ in range(max_x + 1)] for _ in range(max_y + 1)]
+    for line in lines:
+        if line.vertical:
+
+            for y in range(line.min_y(), line.max_y() + 1):
+
+                grid[y][line.min_x()] += 1
+
+        elif line.horizontal:
+
+            for y in range(line.min_x(), line.max_x() + 1):
+
+                grid[line.min_y()][y] += 1
+
+        else:
+            # Add diagonal lines to the grid
+            x, y = line.p1.x, line.p1.y
+            #print(line)
+            if x < line.p2.x:
+                for i in range(x, line.p2.x + 1):
+                    #print(i, y)
+                    grid[y][i] += 1
+                    if y > line.p2.y:
+                        y -= 1
+                    else:
+                        y += 1
+            else:
+                for i in range(x, line.p2.x-1, -1):
+                    #print(i, y)
+                    grid[y][i] += 1
+                    if y > line.p2.y:
+                        y -= 1
+                    else:
+                        y += 1
+
+    #pprint.pprint(grid)
+    return len(list(filter(lambda x: x > 1, list(itertools.chain(*grid)))))
+
+
+print(solve_2(lines))

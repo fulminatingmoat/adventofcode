@@ -1,0 +1,52 @@
+from numba import jit
+
+class LanternFish:
+    def __init__(self, timer):
+        self.timer = timer
+
+    def tick(self, store):
+        self.timer -= 1
+        if self.timer < 0:
+            store.append(LanternFish(9))
+            self.timer = 6
+        return self
+
+    def __str__(self):
+        return self.timer
+    
+    def __repr__(self):
+        return f"{self.timer}"
+        
+def tick(fish, store):
+    fish -= 1
+    if fish < 0:
+        store.append(9)
+        fish = 6
+    return fish
+
+with open("./2021/6/data", "r") as f:
+    fish = [int(lantern_fish) for lantern_fish in f.read().split(',')]
+
+def solve(fish):
+    for x in range(80):
+        fish = list(map(lambda f: tick(f, fish), fish))
+        
+    return len(fish)
+
+def solve_2(fish):
+    lifespans = [fish.count(f) for f in range(10)]
+    for x in range(256):
+        new = 0
+        for i, y in enumerate(lifespans):
+            if i == 0:
+                new += y
+            else:
+                lifespans[i-1] = y
+
+        lifespans[6] += new
+        lifespans[8] += new
+    return sum(lifespans)
+
+
+print(solve(fish))
+print(solve_2(fish))

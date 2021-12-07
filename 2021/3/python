@@ -4,7 +4,6 @@ with open("./2021/3/data", "r") as f:
 def solve(_input):
     gamma = []
     epsilon = []
-    print(zip(*_input).__next__())
     for values in zip(*_input):
         if values.count('1') > values.count('0'):
             gamma.append('1')
@@ -12,12 +11,42 @@ def solve(_input):
         else:
             gamma.append('0')
             epsilon.append('1')
-        print('loop')
+        
     return int(''.join(gamma), base=2) * int(''.join(epsilon), base=2)
 
 print(solve(_input))
 
-def solve_multi(_input):
-    pass
-#print(solve_multi(_input))
+def most_common_bit(li, bit):
+    return len([x for x in li if x[bit] == '1']) - len([x for x in li if x[bit] == '0'])
+
+
+def solve_2(_input):
+    o2 = _input[::]
+    co2 = _input[::]
+    for i in range(len(_input[0])):
+        o2bits = most_common_bit(o2, i)
+        co2bits = most_common_bit(co2, i)
+        if o2bits >= 0:
+            o2 = list(filter(lambda x: x[i] == '1', o2))
+        else:
+            o2 = list(filter(lambda x: x[i] == '0', o2))
+        if co2bits >= 0 and len(co2) > 1:
+            co2 = list(filter(lambda x: x[i] == '0', co2))
+        elif len(co2) > 1:
+            co2 = list(filter(lambda x: x[i] == '1', co2))
+
+    """
+    o2 = _input[::]
+    co2 = _input[::]
+    for i in range(len(_input[0])):
+        o2 = list(filter(lambda x: x[i] == '1' if [y[i] for y in o2].count('1') >= [y[i] for y in o2].count('0') else '0', o2))
+        co2 = list(filter(lambda x: x[i] == '0' if [y[i] for y in co2].count('1') >= [y[i] for y in co2].count('0') else '1', co2))
+
+    print(list(o2))
+    print(list(co2))
+    """
+    return int(''.join(o2[0]), base=2) * int(''.join(co2[0]), base=2)
+
+
+print(solve_2(_input))
 

@@ -1,0 +1,47 @@
+import pprint
+with open("./2021/4/data", "r") as f:
+    nums = f.readline().split(",")
+    f.readline()
+    boards = list(map(lambda y: list(map(lambda z: z.split(), y)),list(map(lambda x: x.split("\n"),f.read().split("\n\n")))))
+
+def check_win(board, nums, transpose=False):
+    for x in board:
+        count = 0
+        for y in x:
+            if y in nums:
+                count += 1
+        if count == len(x):
+            return True
+    if not transpose:
+        return check_win(list(zip(*board)), nums, transpose=True)
+    else:
+        return False
+
+
+def solve(nums, boards):
+    current_nums = []
+    for x in nums:
+        current_nums.append(x)
+        for board in boards:
+            if check_win(board, current_nums):
+                total = sum(sum(map(lambda y: int(y) if y not in current_nums else 0, z)) for z in board)
+                pprint.pprint(board)
+                print(current_nums)
+                return total * int(x)
+
+print(solve(nums, boards))
+
+def solve_multi(nums, boards):
+    winners = []
+    current_nums = []
+    for x in nums:
+        current_nums.append(x)
+        for board in boards:
+            if check_win(board, current_nums):
+                winners.append(board)
+                boards.remove(board)
+                if len(boards) == 0:
+                    total = sum(sum(map(lambda y: int(y) if y not in current_nums else 0, z)) for z in board)
+                    return total * int(x)
+
+print(solve_multi(nums, boards))
